@@ -1,153 +1,120 @@
-// Variabili globali
-let drawingArea = document.getElementById('drawingArea');
-const svgCode = document.getElementById('svgCode');
-const errorBox = document.getElementById('errorBox');
-const lineNumbers = document.getElementById('lineNumbers');
+// ======= VARIABILI GLOBALI =======
+const drawingArea = document.getElementById("drawingArea");
+const svgCode = document.getElementById("svgCode");
 
-const toolButtons = document.querySelectorAll('.tool-btn');
-const toolCircle = document.getElementById('toolCircle');
-const toolRect = document.getElementById('toolRect');
-const toolTriangle = document.getElementById('toolTriangle');
-const colorPicker = document.getElementById('colorPicker');
-const strokeColor = document.getElementById('strokeColor');
-const strokeWidth = document.getElementById('strokeWidth');
-const sizePicker = document.getElementById('sizePicker');
-const clearCanvas = document.getElementById('clearCanvas');
+let currentTool = "circle";
+let fillColor = "#000000";
+let strokeColor = "#000000";
+let strokeWidth = 0;
+let size = 60;
 
-let currentTool = 'circle';
-let currentColor = '#000000';
-let currentStroke = '#000000';
-let currentStrokeWidth = 0;
-let currentSize = 60;
-let addedFirst = false;
+// ======= AGGIUNGI EVENTI AI TOOL =======
+document.getElementById("toolCircle").addEventListener("click", () => setTool("circle"));
+document.getElementById("toolRect").addEventListener("click", () => setTool("rect"));
+document.getElementById("toolTriangle").addEventListener("click", () => setTool("triangle"));
 
-// Attiva il bottone selezionato
-function setActiveTool(buttonId) {
-  toolButtons.forEach(btn => btn.classList.remove('active'));
-  document.getElementById(buttonId).classList.add('active');
-}
-
-// Eventi toolbar
-toolCircle.addEventListener('click', () => { currentTool = 'circle'; setActiveTool('toolCircle'); });
-toolRect.addEventListener('click', () => { currentTool = 'rect'; setActiveTool('toolRect'); });
-toolTriangle.addEventListener('click', () => { currentTool = 'triangle'; setActiveTool('toolTriangle'); });
-colorPicker.addEventListener('input', e => currentColor = e.target.value);
-strokeColor.addEventListener('input', e => currentStroke = e.target.value);
-strokeWidth.addEventListener('input', e => currentStrokeWidth = parseInt(e.target.value));
-sizePicker.addEventListener('input', e => currentSize = parseInt(e.target.value));
-clearCanvas.addEventListener('click', () => {
-  drawingArea.innerHTML = '';
-  svgCode.value = '';
-  lineNumbers.innerHTML = '1';
-  addedFirst = false;
+document.getElementById("colorPicker").addEventListener("input", (e) => {
+  fillColor = e.target.value;
+  document.getElementById("fillIcon").style.backgroundColor = fillColor;
 });
 
-// Click su canvas
-function attachCanvasEvents() {
-  drawingArea.addEventListener('click', (e) => {
-    const rect = drawingArea.getBoundingClientRect();
-    let x = e.clientX - rect.left;
-    let y = e.clientY - rect.top;
+document.getElementById("strokeColor").addEventListener("input", (e) => {
+  strokeColor = e.target.value;
+  document.getElementById("strokeIcon").style.backgroundColor = strokeColor;
+});
 
-    let el;
-    if (currentTool === 'circle') {
-      el = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      el.setAttribute('cx', x.toFixed(1));
-      el.setAttribute('cy', y.toFixed(1));
-      el.setAttribute('r', (currentSize / 2).toFixed(1));
-    } else if (currentTool === 'rect') {
-      el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      el.setAttribute('x', (x - currentSize / 2).toFixed(1));
-      el.setAttribute('y', (y - currentSize / 2).toFixed(1));
-      el.setAttribute('width', currentSize.toFixed(1));
-      el.setAttribute('height', currentSize.toFixed(1));
-    } else if (currentTool === 'triangle') {
-      el = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-      const h = currentSize * Math.sqrt(3) / 2;
-      const points = `${x},${(y - h / 2).toFixed(1)} ${
-        (x - currentSize / 2).toFixed(1)
-      },${(y + h / 2).toFixed(1)} ${
-        (x + currentSize / 2).toFixed(1)
-      },${(y + h / 2).toFixed(1)}`;
-      el.setAttribute('points', points);
-    }
+document.getElementById("strokeWidth").addEventListener("input", (e) => {
+  strokeWidth = parseInt(e.target.value);
+});
 
-    if (el) {
-      el.setAttribute('fill', currentColor);
-      el.setAttribute('stroke', currentStroke);
-      el.setAttribute('stroke-width', currentStrokeWidth);
-      drawingArea.appendChild(el);
-      updateCode();
-    }
-  });
-}
-attachCanvasEvents();
+document.getElementById("sizePicker").addEventListener("input", (e) => {
+  size = parseInt(e.target.value);
+});
 
-function updateCode() {
-  const elements = Array.from(drawingArea.children).map(el => {
-    const clone = el.cloneNode(true);
-    clone.removeAttribute('xmlns');
-    return clone.outerHTML;
-  });
-  svgCode.value = `<svg xmlns="http://www.w3.org/2000/svg" width="${drawingArea.getAttribute('width')}" height="${drawingArea.getAttribute('height')}">\n  ${elements.join('\n  ')}\n</svg>`;
-  errorBox.classList.remove('visible');
-  updateLineNumbers();
+document.getElementById("clearCanvas").addEventListener("click", () => {
+  drawingArea.innerHTML = "";
+  svgCode.value = "";
+});
+
+// ======= FUNZIONE CAMBIO TOOL =======
+function setTool(tool) {
+  currentTool = tool;
+  document.querySelectorAll(".tool-btn").forEach(btn => btn.classList.remove("active"));
+  document.getElementById("tool" + capitalize(tool)).classList.add("active");
 }
 
-function updateLineNumbers() {
-  const lines = svgCode.value.split('\n').length;
-  lineNumbers.innerHTML = Array.from({ length: lines }, (_, i) => i + 1).join('\n');
-  svgCode.rows = lines;
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-// Input manuale codice SVG
-svgCode.addEventListener('input', () => {
-  try {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(svgCode.value, 'image/svg+xml');
-    const newSvg = doc.querySelector('svg');
+// ======= DISEGNO FORME =======
+drawingArea.addEventListener("click", (e) => {
+  const pt = drawingArea.createSVGPoint();
+  pt.x = e.clientX;
+  pt.y = e.clientY;
+  const svgP = pt.matrixTransform(drawingArea.getScreenCTM().inverse());
 
-    if (newSvg) {
-      const cloned = newSvg.cloneNode(true);
-      cloned.setAttribute('id', 'drawingArea');
-      drawingArea.replaceWith(cloned);
-      drawingArea = document.getElementById('drawingArea');
-      attachCanvasEvents();
-      errorBox.classList.remove('visible');
-    } else {
-      throw new Error('Invalid SVG');
-    }
-  } catch (e) {
-    errorBox.classList.add('visible');
+  let shape;
+  if (currentTool === "circle") {
+    shape = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    shape.setAttribute("cx", svgP.x);
+    shape.setAttribute("cy", svgP.y);
+    shape.setAttribute("r", size / 2);
+  } else if (currentTool === "rect") {
+    shape = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    shape.setAttribute("x", svgP.x - size / 2);
+    shape.setAttribute("y", svgP.y - size / 2);
+    shape.setAttribute("width", size);
+    shape.setAttribute("height", size);
+  } else if (currentTool === "triangle") {
+    shape = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+    const x = svgP.x, y = svgP.y;
+    const points = `${x},${y - size / 2} ${x - size / 2},${y + size / 2} ${x + size / 2},${y + size / 2}`;
+    shape.setAttribute("points", points);
   }
-  updateLineNumbers();
+
+  shape.setAttribute("fill", fillColor);
+  shape.setAttribute("stroke", strokeColor);
+  shape.setAttribute("stroke-width", strokeWidth);
+  drawingArea.appendChild(shape);
+  updateCode();
 });
 
-// Scroll sincronizzato
-svgCode.addEventListener('scroll', () => {
-  lineNumbers.scrollTop = svgCode.scrollTop;
+// ======= FUNZIONE AGGIORNA CODICE =======
+function updateCode() {
+  let code = `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"280\">\n`;
+  drawingArea.childNodes.forEach(node => {
+    code += "  " + node.outerHTML + "\n";
+  });
+  code += "</svg>";
+  svgCode.value = code;
+}
+
+// ======= AGGIUNGI ASCOLTATORE PER MODIFICA MANUALE DEL CODICE =======
+svgCode.addEventListener("input", function () {
+  const code = this.value;
+  const parser = new DOMParser();
+  const svgDoc = parser.parseFromString(code, "image/svg+xml");
+  const newSVG = svgDoc.documentElement;
+
+  drawingArea.innerHTML = "";
+  Array.from(newSVG.children).forEach(child => {
+    drawingArea.appendChild(child);
+  });
+  updateCode();
 });
-document.addEventListener('DOMContentLoaded', () => {
-  const links = document.querySelectorAll('.nav-link');
-  const sections = document.querySelectorAll('.section');
 
-  links.forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const targetId = link.getAttribute('href').substring(1);
-      const targetSection = document.getElementById(targetId);
+// ======= CAMBIO SEZIONE (NAV) =======
+document.querySelectorAll(".nav-link").forEach(link => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    document.querySelectorAll(".nav-link").forEach(l => l.classList.remove("active"));
+    link.classList.add("active");
 
-      // Nasconde tutte le sezioni
-      sections.forEach(section => section.classList.remove('visible'));
-
-      // Mostra solo quella selezionata
-      if (targetSection) {
-        targetSection.classList.add('visible');
-      }
-
-      // Gestione stato "active" del menu
-      links.forEach(l => l.classList.remove('active'));
-      link.classList.add('active');
-    });
+    document.querySelectorAll(".section").forEach(section => section.classList.remove("visible"));
+    const target = document.querySelector(link.getAttribute("href"));
+    if (target) {
+      target.classList.add("visible");
+    }
   });
 });

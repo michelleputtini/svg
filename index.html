@@ -6,11 +6,9 @@
   <title>.svg</title>
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
-  
 </head>
 <body>
   <div id="svg-loader">.svg</div>
-
   <div class="layout">
     <nav class="side-nav">
       <a href="#" onclick="history.replaceState(null, null, 'index.html'); location.reload(); return false;"><h1>.svg</h1></a>
@@ -24,7 +22,6 @@
         <li><a href="#fine" class="nav-link">Conclusione</a></li>
       </ul>
     </nav>
-
     <main class="content">
         <section id="intro" class="section visible">
           <div class="section-inner">
@@ -61,16 +58,16 @@
             <h3>Immagini raster: pixel per pixel</h3>
             <p>I formati raster (come JPEG, PNG, GIF) salvano l’immagine come una griglia di pixel. Ogni pixel ha un colore specifico, e l’insieme crea l’immagine visibile. Questo sistema funziona bene per fotografie e immagini ricche di dettagli, ma presenta dei limiti:</p>
             <ul>
-              <li>La qualità dipende dalla risoluzione originale</li>
-              <li>Ingrandendo troppo l’immagine, i pixel diventano visibili (effetto “sgranato”)</li>
-              <li>I file possono diventare molto pesanti, soprattutto con alte risoluzioni</li>
+              <li>┏ La qualità dipende dalla risoluzione originale</li>
+              <li>┣ Ingrandendo troppo l’immagine, i pixel diventano visibili</li>
+              <li>┗ I file possono diventare molto pesanti, soprattutto con alte risoluzioni</li>
             </ul>
             <h3>Immagini vettoriali: istruzioni matematiche</h3>
             <p>Le immagini vettoriali, come quelle in formato SVG, non usano pixel. Sono costruite con forme geometriche (linee, curve, poligoni) definite da coordinate e formule. I principali vantaggi sono:</p>
             <ul>
-              <li>Scalabilità perfetta: qualità invariata a qualsiasi dimensione</li>
-              <li>Modificabilità: ogni elemento è indipendente e può essere modificato facilmente</li>
-              <li>File leggeri: ideali per icone, loghi, illustrazioni semplici e UI</li>
+              <li>┏ Scalabilità perfetta: qualità invariata a qualsiasi dimensione</li>
+              <li>┣ Modificabilità: ogni elemento è indipendente e può essere modificato</li>
+              <li>┗ File leggeri: ideali per icone, loghi, illustrazioni semplici e UI</li>
             </ul>
             <h3>Quale scegliere?</h3>
             <p>Usa raster per fotografie, texture o immagini complesse.</p>
@@ -81,6 +78,7 @@
           <div class="section-inner">
             <h2>Vantaggi dell’SVG</h2>
             <p>Il formato SVG offre numerosi vantaggi, soprattutto nel contesto della grafica digitale moderna. Ecco perché è spesso preferito rispetto ai formati raster per determinati usi:</p>
+        
             <div class="advantages-grid">
               <div class="advantage">
                 <h4>Qualità sempre perfetta</h4>
@@ -105,12 +103,12 @@
             </div>
           </div>
         </section>
-  
+          
         <section id="confronto" class="section">
           <div class="section-inner">
             <h2>Confronto SVG vs PNG</h2>
             <p>Qui sotto puoi vedere un esempio reale della differenza tra un file SVG e un file PNG. L'SVG resta nitido anche ingrandendolo, mentre il PNG mostra la tipica sgranatura dei formati raster.</p>
-            
+        
             <table class="compare-table">
               <thead>
                 <tr>
@@ -147,70 +145,55 @@
                 </tr>
               </tbody>
             </table>
-                    
+        
             <h2 class="image-compare-title">Immagini interattive</h2>
-            <p>Qui sotto puoi osservare con i tuoi occhi cosa cambia tra un file vettoriale e uno raster. Passa il mouse sulle immagine e scopri cosa succede.</p>
-
+            <p>Qui sotto puoi osservare con i tuoi occhi cosa cambia tra un file vettoriale e uno raster. Passa il mouse sulle immagini e scopri cosa succede.</p>
+        
             <div class="compare-container">
               <div class="compare-box">
                 <h3>SVG</h3>
                 <div class="compare-inner">
-                  <object type="image/svg+xml" data="IMG SVG/banana.svg" class="compare-img zoom-strong"></object>
+                  <object type="image/svg+xml" data="assets/IMG/banana.svg" class="compare-img zoom-strong"></object>
                 </div>
               </div>
               <div class="compare-box">
                 <h3>PNG</h3>
                 <div class="compare-inner">
-                  <img src="IMG SVG/banana.png" class="compare-img zoom-strong" alt="Banana PNG">
+                  <img src="assets/IMG/banana.png" class="compare-img zoom-strong" alt="Banana PNG">
                 </div>
               </div>
             </div>
-         </section>
-
+          </div>
+        </section>
+        
          <section id="sperimenta" class="section">
           <div class="section-inner">
             <h2>Sperimenta con l'SVG</h2>
-            <p class="section-description">
-              In questa sezione puoi disegnare forme SVG interattivamente: scegli forma, colore, dimensione e osserva il codice generarsi in tempo reale.
-            </p>
-        
+            <p class="section-description">In questa sezione puoi disegnare forme SVG interattivamente: scegli forma, colore, dimensione e osserva il codice generarsi in tempo reale.</p>
             <div class="canvas-section">
-              <!-- Toolbar -->
-              <div class="toolbar-wrapper">
-                <div class="toolbar-left">
-                  <button id="toolCircle" class="tool-btn active">Cerchio</button>
-                  <button id="toolRect" class="tool-btn">Rettangolo</button>
-                  <button id="toolTriangle" class="tool-btn">Triangolo</button>
-              
-                  <label class="tool-btn color-combo">
-                    <span class="color-icon fill-icon" id="fillIcon"></span>
-                    <input type="color" id="colorPicker" value="#000000" />
-                  </label>
-              
-                  <input type="number" id="sizePicker" value="60" min="10" max="200" class="tool-btn tool-input" title="Dimensione" />
-              
-                  <label class="tool-btn color-combo">
-                    <span class="color-icon stroke-icon" id="strokeIcon"></span>
-                    <input type="color" id="strokeColor" value="#000000" />
-                  </label>
-              
-                  <input type="number" id="strokeWidth" value="0" min="0" max="10" class="tool-btn tool-input" title="Spessore bordo" />
-                </div>
-              
+              <div class="toolbar toolbar-left">
+                <button id="toolCircle" class="tool-btn active">Cerchio</button>
+                <button id="toolRect" class="tool-btn">Rettangolo</button>
+                <button id="toolTriangle" class="tool-btn">Triangolo</button>
+                <label class="tool-btn color-wrapper" title="Colore riempimento">
+                  <span class="color-square fill-icon" id="fillIcon"></span>
+                  <input type="color" id="colorPicker" value="#000000" />
+                </label>
+                <input type="number" id="sizePicker" value="60" min="10" max="200" class="tool-btn tool-input" title="Dimensione" />
+                <label class="tool-btn color-wrapper" title="Colore contorno">
+                  <span class="color-square stroke-icon" id="strokeIcon"></span>
+                  <input type="color" id="strokeColor" value="#000000" />
+                </label>
+                <input type="number" id="strokeWidth" value="0" min="0" max="10" class="tool-btn tool-input" title="Spessore bordo" />
                 <button id="clearCanvas" class="clear-btn">Svuota</button>
               </div>
-                                                  
-              <!-- Titolo canvas -->
               <h3 class="canvas-title">Disegna nel canvas</h3>
-        
-              <!-- Canvas + Codice -->
               <div class="canvas-code-wrapper">
                 <div class="canvas-wrapper">
                   <svg id="drawingArea" width="600" height="280"></svg>
                 </div>
-        
                 <div class="code-output">
-                  <h3>Codice SVG</h3>
+                  <h3>Modifica codice SVG</h3>
                   <div class="code-scroll">
                     <textarea id="svgCode"></textarea>
                   </div>
@@ -219,8 +202,6 @@
             </div>
           </div>
         </section>
-
-        <!-- Sezione conclusione -->
         <section id="fine" class="section">
           <div class="section-inner">
             <h2>Conclusione</h2>
@@ -228,15 +209,11 @@
             <p>Scegliere il formato giusto – vettoriale o raster – in base all’uso finale è il primo passo per un design efficace.</p>
           </div>
         </section>
-        
       </main>
-  </div> <!-- fine .layout -->
-  
-  <footer class="site-footer">
-    Progetto di Michelle Puttini 2025 – Source OpenAI
-  </footer>
-  
     </div>
-    
+    <footer class="site-footer">
+      Progetto di Michelle Puttini 2025 – Source OpenAI
+    </footer>
   </body>
   </html>
+  
