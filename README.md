@@ -93,12 +93,12 @@ L’obiettivo è rendere l’SVG comprensibile e stimolante anche per chi non ha
 
 ## Media di progetto
 
-[<img src="doc/screen_1.png" width="500" alt="Schermata introduttiva del sito">]()
+<img src="doc/screen_1.png" width="500" alt="Schermata introduttiva del sito" />
 
-[<img src="doc/screen_2.png" width="500" alt="Sezione confronto vettoriale/raster">]()
+<img src="doc/screen_2.png" width="500" alt="Sezione confronto vettoriale/raster" />
 
-[<img src="doc/screen_3.png" width="500" alt="Struttura della pagina sperimentale">]()
+<img src="doc/screen_3.png" width="500" alt="Struttura della pagina sperimentale" />
 
 ## Interazione live nel canvas
 
-[<img src="doc/rec_canvas.gif" width="500" alt="Interazione utente con il canvas">]()
+<img src="doc/rec_canvas.gif" width="500" alt="Interazione con il canvas SVG" />
