@@ -2,10 +2,10 @@ SUPSI 2025
 Corso d’interaction design, CV428.01  
 Docenti: A. Gysin, G. Profeta  
 
-Elaborato 1: .svg
+Elaborato 2: .svg
 
 # svg  
-Michelle Puttini  
+Autrice: Michelle Puttini  
 🔗 [Link al sito](https://michelleputtini.github.io/svg/)
 
 
